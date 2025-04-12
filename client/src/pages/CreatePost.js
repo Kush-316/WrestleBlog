@@ -2,22 +2,7 @@ import { useState } from 'react';
 import ReactQuill from 'react-quill-new';
 import 'react-quill-new/dist/quill.snow.css';
 import {Navigate} from "react-router-dom";
-
-const modules = {
-    toolbar: [
-        [{ 'header': [1,2,false] }],
-        ['bold', 'italic', 'underline','strike', 'blockquote'],
-        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-        ['link', 'image'],
-        ['clean']
-    ]
-};
-const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
-    'list', 'bullet', 'indent',
-    'link', 'image'
-  ];
+import Editor from '../Editor';
 
 export default function CreatePost(){
     const [title, setTitle] = useState('');
@@ -35,6 +20,7 @@ export default function CreatePost(){
         const response = await fetch('http://localhost:4000/post', {
             method: 'POST',
             body: data,
+            credentials: 'include',
         });
         if (response.ok){
             setRedirect(true);
@@ -49,20 +35,14 @@ export default function CreatePost(){
             <input type="title" 
             placeholder={'Title'} 
             value={title} 
-            onChange={ev => setTitle(ev.target.value)}
-            />
+            onChange={ev => setTitle(ev.target.value)}/>
             <input type="summary" 
             placeholder={'Summary'}
             value={summary}
-            onChange={ev => setSummary(ev.target.value)}
-            />
+            onChange={ev => setSummary(ev.target.value)}/>
             <input type="file" 
             onChange={ev => setFiles(ev.target.files)} />
-            <ReactQuill value={content} 
-            onChange={newValue => setContent(newValue)}
-            modules={modules} 
-            formats={formats} 
-            />
+            <Editor value={content} onChange={setContent} />
             <button style={{marginTop:'5px'}}>Create post</button>
         </form>
     );
