@@ -23,7 +23,7 @@ export default function Header(){
     }
 
     const username = userInfo?.username;
-
+    
     return(
         <header>
                 <Link to="/" className="logo">MyBlog</Link>
